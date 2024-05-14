@@ -171,6 +171,43 @@ sales_by_year_cat_1_tbl %>%
     fill = "Main category" # Changes the legend name
   )
 
+# 6.3 CHALLENGE  sales by location (state) with a bar plot. ----
+
+#Separate the location in two columns, city and state
+bike_orderlines_wrangled_tbl_city <- bike_orderlines_wrangled_tbl %>%
+  separate(col = location, into = c("city", "state"), sep=", ")
+
+#Validate the structure
+glimpse(bike_orderlines_wrangled_tbl_city)
+
+#Create new table
+sales_by_loc_tbl <- bike_orderlines_wrangled_tbl_city %>%
+  group_by(state) %>%
+  summarize(sales = sum(total_price)) %>%
+  mutate(sales_text = scales::dollar(sales, big.mark = ".", 
+                                     decimal.mark = ",", 
+                                     prefix = "", 
+                                     suffix = " €"))
+
+sales_by_loc_tbl %>%
+  ggplot(aes(x = reorder(state, -sales), y = sales)) +
+  geom_col(fill = "#2DC6D6")+
+  geom_label(aes(label = sales_text))+
+  scale_y_continuous(labels = scales::dollar_format(big.mark =".",
+                                                    decimal.mark = ",",
+                                                    prefix = "",
+                                                    suffix = " €"))+
+  labs(
+    title = "Revenue by State",
+    subtitle = "Total revenue by state",
+    x = "State",
+    y = "Revenue"
+  )+
+  theme(axis.text.x = element_text(angle = 45, hjust= 1))
+
+
+
+  
 # 7.0 Writing Files ----
 
 # 7.1 Excel ----
