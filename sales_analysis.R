@@ -170,3 +170,19 @@ sales_by_year_cat_1_tbl %>%
     subtitle = "Each product category has an upward trend",
     fill = "Main category" # Changes the legend name
   )
+
+# 7.0 Writing Files ----
+
+# 7.1 Excel ----
+install.packages("writexl")
+library("writexl")
+bike_orderlines_wrangled_tbl %>%
+  write_xlsx("01_raw_data/02_bikes_sales/03_wrangled_data/bike_orderlines.xlsx")
+
+# 7.2 CSV ----
+bike_orderlines_wrangled_tbl %>% 
+  write_csv("01_raw_data/02_bikes_sales/03_wrangled_data/bike_orderlines.csv")
+
+# 7.3 RDS ----
+bike_orderlines_wrangled_tbl %>% 
+  write_rds("01_raw_data/02_bikes_sales/03_wrangled_data/bike_orderlines.rds")
