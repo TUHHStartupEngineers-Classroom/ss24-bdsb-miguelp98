@@ -8,7 +8,7 @@ format:
     self-contained: false
 ---
 
-```{r setup, include=FALSE}
+```{r plot, fig.width=10, fig.height=7}
 library(tidyverse)
 library(readxl)
 library(scales)
@@ -42,9 +42,12 @@ bike_orderlines_wrangled_tbl <- bike_orderlines_joined_tbl %>%
   rename(bikeshop = name) %>%
   set_names(names(.) %>% str_replace_all("\\.", "_"))
 
+# Separar ubicación en ciudad y estado
+bike_orderlines_wrangled_tbl <- bike_orderlines_wrangled_tbl %>%
+  separate(col = location, into = c("city", "state"), sep = ", ")
+
 # Create table
 sales_by_loc_tbl <- bike_orderlines_wrangled_tbl %>%
-  separate(col = location, into = c("city", "state"), sep = ", ") %>%
   group_by(state) %>%
   summarize(sales = sum(total_price)) %>%
   mutate(sales_text = scales::dollar(sales, big.mark = ".", 
@@ -53,8 +56,7 @@ sales_by_loc_tbl <- bike_orderlines_wrangled_tbl %>%
                                      suffix = " €"))
 
 # Visualize with ggplot2
-sales_by_loc_tbl %>%
-  ggplot(aes(x = reorder(state, -sales), y = sales)) +
+ggplot(sales_by_loc_tbl, aes(x = reorder(state, -sales), y = sales)) +
   geom_col(fill = "#2DC6D6") +
   geom_label(aes(label = sales_text)) +
   scale_y_continuous(labels = scales::dollar_format(big.mark = ".", 
@@ -66,9 +68,35 @@ sales_by_loc_tbl %>%
     subtitle = "Total revenue by state",
     x = "State",
     y = "Revenue"
-  ) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  ) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+# TASK 2: create table location and year
+sales_by_year_loc_tbl <- bike_orderlines_wrangled_tbl %>%
+  mutate(year = year(order_date)) %>%
+  group_by(state, year) %>%
+  summarize(sales = sum(total_price), .groups = 'drop') %>%
+  mutate(sales_text = scales::dollar(sales, big.mark = ".", 
+                                     decimal.mark = ",", 
+                                     prefix = "", 
+                                     suffix = " €"))
+
+# Visualizar ventas por ubicación y año
+sales_by_year_loc_tbl %>%
+  ggplot(aes(x = year, y = sales, fill = state)) +
+  geom_col() +
+  geom_label(aes(label = sales_text)) +
+  scale_y_continuous(labels = scales::dollar_format(big.mark = ".", 
+                                                    decimal.mark = ",", 
+                                                    prefix = "", 
+                                                    suffix = " €")) +
+  labs(
+    title = "Revenue by Year and State",
+    subtitle = "Total revenue by year and state",
+    x = "Year",
+    y = "Revenue"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  facet_wrap(~ state, scales = "free_y")
 
 ```
 
