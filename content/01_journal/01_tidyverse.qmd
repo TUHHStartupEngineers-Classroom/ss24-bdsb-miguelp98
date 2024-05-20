@@ -99,5 +99,3 @@ sales_by_year_loc_tbl %>%
   facet_wrap(~ state, scales = "free_y")
 
 ```
-
-Hello world
