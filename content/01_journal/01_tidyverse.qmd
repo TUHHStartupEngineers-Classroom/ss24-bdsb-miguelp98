@@ -1,19 +1,32 @@
 ---
 title: "Tidyverse"
 author: "Miguel Peñate"
-date: "`r Sys.Date()`"
 format:
   html:
     code-fold: true
     self-contained: false
 ---
+> Tidyverse is a collection of essential R packages for data science. The packages under the tidyverse umbrella help us in performing and interacting with the data. There are a whole host of things you can do with your data, such as subsetting, transforming, visualizing, etc.
 
-```{r plot, fig.width=10, fig.height=7}
+In this section we will study the **sales of bikes** through bikes stores in Germany.
+We will work with a database provided by [Canyon](https://cloud.tuhh.de/index.php/s/Cxe7YSM8RY2SgCn)
+
+After clean all the data we are showing *two* different tasks.
+---
+
+### Task 1: Revenue by State
+
+In the column bar plot you can see the <u>Revenue by State</u> . As we can see the state of **North Rhine-Westphalia** is the one that has highest Revenue.
+
+> It is recommended to expand the pictures to see them properly.
+
+```{r plot1, fig.width=18, fig.height=7, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(readxl)
 library(scales)
 library(lubridate)
 library(here)
+library(ggrepel)
 
 # Build the relatives routes in the file .qmd
 bikes_path <- here::here("01_raw_data", "bikes.xlsx")
@@ -42,7 +55,7 @@ bike_orderlines_wrangled_tbl <- bike_orderlines_joined_tbl %>%
   rename(bikeshop = name) %>%
   set_names(names(.) %>% str_replace_all("\\.", "_"))
 
-# Separar ubicación en ciudad y estado
+# Separar ubication in city and state
 bike_orderlines_wrangled_tbl <- bike_orderlines_wrangled_tbl %>%
   separate(col = location, into = c("city", "state"), sep = ", ")
 
@@ -55,10 +68,11 @@ sales_by_loc_tbl <- bike_orderlines_wrangled_tbl %>%
                                      prefix = "", 
                                      suffix = " €"))
 
+
 # Visualize with ggplot2
 ggplot(sales_by_loc_tbl, aes(x = reorder(state, -sales), y = sales)) +
   geom_col(fill = "#2DC6D6") +
-  geom_label(aes(label = sales_text)) +
+  geom_text_repel(aes(label = sales_text), size = 7, box.padding = 0.5, max.overlaps = 10) +
   scale_y_continuous(labels = scales::dollar_format(big.mark = ".", 
                                                     decimal.mark = ",", 
                                                     prefix = "", 
@@ -69,7 +83,13 @@ ggplot(sales_by_loc_tbl, aes(x = reorder(state, -sales), y = sales)) +
     x = "State",
     y = "Revenue"
   ) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
 
+### Task 2: Sales by location and year
+
+In the image below we are separating the images for each state in each year. This will give us 12 different bar charts.
+
+```{r plot2, fig.width=18, fig.height=11, echo=FALSE, message=FALSE, warning=FALSE}
 # TASK 2: create table location and year
 sales_by_year_loc_tbl <- bike_orderlines_wrangled_tbl %>%
   mutate(year = year(order_date)) %>%
@@ -80,11 +100,11 @@ sales_by_year_loc_tbl <- bike_orderlines_wrangled_tbl %>%
                                      prefix = "", 
                                      suffix = " €"))
 
-# Visualizar ventas por ubicación y año
+# Visualize sales by location and year
 sales_by_year_loc_tbl %>%
   ggplot(aes(x = year, y = sales, fill = state)) +
   geom_col() +
-  geom_label(aes(label = sales_text)) +
+  geom_text_repel(aes(label = sales_text), size = 3.5, box.padding = 0.3, max.overlaps = 10) +
   scale_y_continuous(labels = scales::dollar_format(big.mark = ".", 
                                                     decimal.mark = ",", 
                                                     prefix = "", 

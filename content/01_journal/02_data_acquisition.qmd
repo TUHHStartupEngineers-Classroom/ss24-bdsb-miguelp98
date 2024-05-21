@@ -1,15 +1,23 @@
 ---
 title: "Data Acquisition"
 author: "Miguel Peñate Arrieta"
-date: "`r Sys.Date()`"
 format:
   html:
     code-fold: true
     self-contained: false
 ---
 
-```{r plot, fig.width=10, fig.height=7}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+> Data acquisition is the process of converting real-world signals to the digital domain for display, storage, and analysis.
+
+In this section we will work with two concepts <u>API</u> and <u>Scraping</u>.
+In the **Task 1** we will work with the API and can get the weather of Madrid. For that, we will use the following link [Open Weather](https://openweathermap.org/).
+In the **Task 2** we will scrape the model and prices from the page [Rose Bikes](https://www.rosebikes.de).
+
+
+### Task 1: Using API to get Madrid's temperature
+
+```{r plot1, fig.width=4, fig.height=2, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(httr)
 library(jsonlite)
 library(ggplot2)
@@ -32,13 +40,8 @@ if (status_code(response) == 200) {
   # Parse the content of the response
   weather_data <- fromJSON(content(response, as = "text", encoding = "UTF-8"))
   
-  # Check the structure of the weather_data$weather object
-  str(weather_data$weather)
-  
   # Extract relevant data
   main_data <- weather_data$main
-  
-  # weather_data$weather is a list, access the first entry
   weather_description <- weather_data$weather$description
   
   # Create a data frame with the data
@@ -49,9 +52,6 @@ if (status_code(response) == 200) {
     Humidity = main_data$humidity,
     Description = weather_description
   )
-  
-  # Print the data in a readable format
-  print(weather_df)
   
   # Plot the temperature
   ggplot(weather_df, aes(x = City, y = Temperature, color = Description)) +
@@ -64,7 +64,17 @@ if (status_code(response) == 200) {
 } else {
   print("Error in the API request")
 }
+```
 
+### Task 2: Scraping to get prices from different bike models
+
+The idea is to print the model and price of the next picture:
+
+![](assets/logo/rose.png){width=90% fig-align="center"}
+
+
+
+```{r plot2, fig.width=4, fig.height=2, echo=FALSE, message=FALSE, warning=FALSE}
 # CHALLENGE 2 ----
 
 library(tidyverse)
@@ -72,6 +82,7 @@ library(rvest)
 library(xopen)
 library(readr)
 library(scales)
+library(kableExtra)
 
 # URL de la página principal de Rose Bikes con la correcta codificación para "Fahrräder"
 url_home <- "https://www.rosebikes.de/fahrr%C3%A4der"
@@ -86,8 +97,7 @@ bike_categories_chr <- html_home |>
   str_c("https://www.rosebikes.de", ... = _)
 
 # Imprimir las URLs de las categorías para verificar
-print(bike_categories_chr)
-
+#print(bike_categories_chr)
 
 # Seleccionamos la primera categoría de bicicletas (Gravel)
 bike_category_url <- bike_categories_chr[1]
@@ -101,7 +111,7 @@ bike_url_chr <- html_bike_category |>
   str_c("https://www.rosebikes.de", ... = _)
 
 # Imprimir las URLs de los modelos de bicicletas para verificar
-print(bike_url_chr)
+#print(bike_url_chr)
 
 # URL de la subcategoría Adventure
 url_adventure <- bike_url_chr[1]  # Asumimos que "Adventure" es la primera subcategoría
@@ -126,12 +136,7 @@ bike_data <- tibble(
   Price = bike_prices
 )
 
-# Imprimir el data frame
-print(bike_data)
-
+# Convertir el data frame a una tabla con estilo
+kable(bike_data, format = "html", table.attr = "class='table table-striped'") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
-
-
-
-
-
