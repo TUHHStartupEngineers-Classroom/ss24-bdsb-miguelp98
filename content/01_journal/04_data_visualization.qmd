@@ -1,8 +1,116 @@
 ---
 title: "Data Visualization"
-author: "Joschka Schwarz"
+author: "Miguel Peñate"
+#format:
+ # html:
+   # code-fold: true
+    #self-contained: false
 ---
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+```{r plot, fig.width=10, fig.height=7, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(lubridate)
+library(ggthemes)
+library(ggrepel)
+library(maps)
+
+# Cargar datos
+covid_data_tbl <- read_csv("https://covid.ourworldindata.org/data/owid-covid-data.csv")
+
+# Selección de países de interés
+countries <- c("Europe", "Germany", "United Kingdom", "France", "Spain", "United States")
+
+# Filtrar y preparar los datos
+covid_data_filtered <- covid_data_tbl %>%
+  filter(location %in% countries) %>%
+  select(location, date, total_cases) %>%
+  mutate(date = as.Date(date, format="%Y-%m-%d")) %>%
+  group_by(location) %>%
+  arrange(location, date) %>%
+  mutate(cumulative_cases = total_cases)
+
+# Para visualizar los datos, utilizaremos la última fecha para los labels
+latest_data <- covid_data_filtered %>%
+  group_by(location) %>%
+  filter(date == max(date)) %>%
+  filter(!is.na(cumulative_cases))
+
+# Crear la visualización
+ggplot(data = covid_data_filtered, aes(x = date, y = cumulative_cases, color = location)) +
+  geom_line(size = 1.2) +
+  geom_label_repel(data = latest_data, aes(label = scales::comma(cumulative_cases)), 
+                   nudge_x = 10, nudge_y = 10, size = 3, color = "black", fill = "white") +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b-%y") +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "COVID-19 confirmed cases worldwide",
+    subtitle = "As of latest available data",
+    x = "",
+    y = "Cumulative Cases",
+    color = "Continent / Country"
+  ) +
+  theme_minimal() +
+  theme(
+    text = element_text(color = "white"),
+    plot.background = element_rect(fill = "black"),
+    panel.background = element_rect(fill = "black"),
+    legend.background = element_rect(fill = "black"),
+    legend.key = element_rect(fill = "black"),
+    axis.text = element_text(color = "white"),
+    axis.title = element_text(color = "white"),
+    plot.title = element_text(face = "bold", size = 16),
+    plot.subtitle = element_text(size = 12)
+  )
+```
+
+
+### CHALLENGE 2
+
+```{r echo=FALSE}
+# Cargar datos de mapa mundial
+world <- map_data("world")
+
+# Filtrar y preparar los datos de COVID-19
+covid_data_filtered <- covid_data_tbl %>%
+  filter(!is.na(total_deaths), !is.na(population)) %>%
+  select(location, date, total_deaths, population) %>%
+  group_by(location) %>%
+  filter(date == max(date)) %>%
+  mutate(mortality_rate = total_deaths / population * 100) %>%
+  mutate(location = case_when(
+    location == "United Kingdom" ~ "UK",
+    location == "United States" ~ "USA",
+    location == "Democratic Republic of Congo" ~ "Democratic Republic of the Congo",
+    TRUE ~ location
+  )) %>%
+  distinct(location, .keep_all = TRUE)
+
+# Unir los datos del mapa con los datos de COVID-19
+plot_data <- world %>%
+  left_join(covid_data_filtered, by = c("region" = "location"))
+
+# Crear la visualización
+ggplot(plot_data) +
+  geom_map(aes(map_id = region, fill = mortality_rate), map = world) +
+  expand_limits(x = world$long, y = world$lat) +
+  scale_fill_gradient(low = "red", high = "darkred", na.value = "grey50", 
+                      name = "Mortality Rate", labels = scales::percent) +
+  labs(
+    title = "Confirmed COVID-19 deaths relative to the size of the population",
+    subtitle = "Around 8.2 Million confirmed COVID-19 deaths worldwide",
+    caption = "Date: latest available data"
+  ) +
+  theme_minimal() +
+  theme(
+    text = element_text(color = "white"),
+    plot.background = element_rect(fill = "black"),
+    panel.background = element_rect(fill = "black"),
+    legend.background = element_rect(fill = "black"),
+    legend.key = element_rect(fill = "black"),
+    axis.text = element_text(color = "white"),
+    axis.title = element_text(color = "white"),
+    plot.title = element_text(face = "bold", size = 16),
+    plot.subtitle = element_text(size = 12),
+    plot.caption = element_text(size = 10)
+  )
+```

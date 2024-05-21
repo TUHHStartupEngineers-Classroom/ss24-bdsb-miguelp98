@@ -1,0 +1,18 @@
+{
+  "hash": "bbb006d223295365174c8790be9fe1ea",
+  "result": {
+    "markdown": "---\ntitle: \"Data Visualization\"\nauthor: \"Miguel Peñate\"\n#format:\n # html:\n   # code-fold: true\n    #self-contained: false\n---\n\n::: {.cell hash='04_data_visualization_cache/html/plot_42dfef5cc4ae18e37506a9494c9736d9'}\n::: {.cell-output-display}\n![](04_data_visualization_files/figure-html/plot-1.png){width=960}\n:::\n:::\n\n\n\n### CHALLENGE 2\n\n\n::: {.cell hash='04_data_visualization_cache/html/unnamed-chunk-1_ed2482eccbe6145efeb22f39fd9fc24f'}\n::: {.cell-output-display}\n![](04_data_visualization_files/figure-html/unnamed-chunk-1-1.png){width=672}\n:::\n:::",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"../../site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\r\n<script src=\"../../site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\r\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

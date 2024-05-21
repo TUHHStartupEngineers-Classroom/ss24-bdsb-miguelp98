@@ -1,8 +1,119 @@
 ---
 title: "Data Wrangling"
-author: "Joschka Schwarz"
+author: "Miguel Peñate"
+date: "`r Sys.Date()`"
+format:
+  html:
+    code-fold: true
+    self-contained: false
 ---
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+
+```{r plot, fig.width=10, fig.height=7}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+setwd("C:/Users/migue/Desktop/Hamburg/TUHH/ss24-bdsb-miguelp98/01_raw_data")
+# Cargar librerías necesarias
+library(tidyverse)
+library(vroom)
+library(data.table)
+library(tictoc)
+
+# Definir los tipos de columnas para cada archivo
+
+# assignee.tsv
+col_types_assignee <- list(
+  id = col_character(),
+  type = col_character(),
+  organization = col_character()
+)
+
+# patent.tsv
+col_types_patent <- list(
+  id = col_character(),
+  date = col_date("%Y-%m-%d"),
+  num_claims = col_integer()
+)
+
+# patent_assignee.tsv
+col_types_patent_assignee <- list(
+  patent_id = col_character(),
+  assignee_id = col_character()
+)
+
+# uspc.tsv
+col_types_uspc <- list(
+  patent_id = col_character(),
+  mainclass_id = col_character(),
+  sequence = col_integer()
+)
+
+# Importar los datos
+
+# assignee.tsv
+assignee_tbl <- vroom(
+  file       = "assignee.tsv", 
+  delim      = "\t", 
+  col_types  = col_types_assignee,
+  na         = c("", "NA", "NULL")
+)
+setDT(assignee_tbl)
+
+# patent.tsv
+patent_tbl <- vroom(
+  file       = "patent.tsv", 
+  delim      = "\t", 
+  col_types  = col_types_patent,
+  na         = c("", "NA", "NULL")
+)
+setDT(patent_tbl)
+
+# patent_assignee.tsv
+patent_assignee_tbl <- vroom(
+  file       = "patent_assignee.tsv", 
+  delim      = "\t", 
+  col_types  = col_types_patent_assignee,
+  na         = c("", "NA", "NULL")
+)
+setDT(patent_assignee_tbl)
+
+# uspc.tsv
+uspc_tbl <- vroom(
+  file       = "uspc.tsv", 
+  delim      = "\t", 
+  col_types  = col_types_uspc,
+  na         = c("", "NA", "NULL")
+)
+setDT(uspc_tbl)
+
+# Renombrar columnas para consistencia
+setnames(patent_assignee_tbl, old = c("patent_id", "assignee_id"), new = c("id", "assignee_id"))
+setnames(uspc_tbl, old = "patent_id", new = "id")
+
+# Combinar los datos paso a paso
+combined_data <- merge(patent_tbl, patent_assignee_tbl, by = "id")
+combined_data <- merge(combined_data, assignee_tbl, by.x = "assignee_id", by.y = "id")
+combined_data <- merge(combined_data, uspc_tbl, by = "id")
+
+# Visualizar una muestra de los datos combinados
+combined_data %>% glimpse()
+
+# Contar las patentes por organización
+patent_count <- combined_data[, .N, by = organization][order(-N)][1:10]
+
+# Mostrar el resultado
+print(patent_count)
+
+
+# Filtrar patentes de agosto de 2014 y contar por organización
+august_patents <- combined_data[format(date, "%Y-%m") == "2014-08", .N, by = organization][order(-N)][1:10]
+
+# Mostrar el resultado
+print(august_patents)
+
+# Filtrar datos y contar las principales clases tecnológicas
+top_tech_sectors <- combined_data[, .N, by = mainclass_id][order(-N)][1:5]
+
+# Mostrar el resultado
+print(top_tech_sectors)
+```
