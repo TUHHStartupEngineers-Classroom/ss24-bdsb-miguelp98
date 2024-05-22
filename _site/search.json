@@ -1,45 +1,17 @@
 [
   {
-    "objectID": "content/03_other/06_links.html",
-    "href": "content/03_other/06_links.html",
-    "title": "Links",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "My Lab Journal",
     "section": "",
-    "text": "R is a free open-source programming language that can be used for statistical analysis, data-simulation, graphing, and lots of other stuff. Another free program is R-studio, that provides a nice graphic interface for R. Download R first, then download R-studio. Both can run on PCs, Macs or Linux. Students will be learning R in the stats labs using the lab manual .\n\n\n\n\nGoogle is great, Google your problem\nStackoverflow is great, google will often take you there because someone has already asked your question, and someone else has answered, usually many people have answered your question many ways."
+    "text": "Welcome to my online portfolio. I’m Miguel, a passionate Industrial Engineer from the esteemed Politécnica de Madrid, in Spain. Currently, I’m expanding my horizons as an Erasmus student at TUHH, where I’m delving into the dynamic world of Data Science. On this website, you’ll have the opportunity to follow my journey through the Data Science course, as I share my progress and insights step by step. Enjoy your visit!"
   },
   {
-    "objectID": "content/01_journal/03_data_wrangling.html",
-    "href": "content/01_journal/03_data_wrangling.html",
-    "title": "Data Wrangling",
-    "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
-  },
-  {
-    "objectID": "content/01_journal/04_data_visualization.html",
-    "href": "content/01_journal/04_data_visualization.html",
-    "title": "Data Visualization",
-    "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
-  },
-  {
-    "objectID": "content/01_journal/01_tidyverse.html",
-    "href": "content/01_journal/01_tidyverse.html",
-    "title": "Tidyverse",
-    "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh.\nThis is a .qmd file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a # in front of your text, it will create a top level-header.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
-  },
-  {
-    "objectID": "content/01_journal/01_tidyverse.html#header-2",
-    "href": "content/01_journal/01_tidyverse.html#header-2",
-    "title": "Tidyverse",
-    "section": "\n2.1 Header 2",
-    "text": "2.1 Header 2\nHeader 3\nHeader 4\nHeader 5\nHeader 6"
-  },
-  {
-    "objectID": "content/01_journal/02_data_acquisition.html",
-    "href": "content/01_journal/02_data_acquisition.html",
-    "title": "Data Acquisition",
-    "section": "",
-    "text": "Note\n\n\n\nYou can delete everything in here and start fresh."
+    "objectID": "index.html#what-are-you-going-to-see",
+    "href": "index.html#what-are-you-going-to-see",
+    "title": "My Lab Journal",
+    "section": "What are you going to see?",
+    "text": "What are you going to see?\nIn the top menu, you will find the menu, where there are different sections:\n\nHome: This is the main screen.\nJournal: This is in turn subdivided into:\n\n01: Tidyverse\n02: Data Acquisition\n03: Data Wrangling\n04: Data Visualization\n\nClass Notes: Any contribution that I have seen interesting to contribute.\nLinks: Different interesting links that have been used."
   },
   {
     "objectID": "content/02_notes/05_class_notes.html",
@@ -49,17 +21,52 @@
     "text": "IMPORTANT: You can delete everything in here and start fresh. You might want to start by not deleting anything above this line until you know what that stuff is doing.\nThis is an .qmd file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a # in front of your text, it will create a top level-header."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "My Lab Journal",
+    "objectID": "content/01_journal/03_data_wrangling.html",
+    "href": "content/01_journal/03_data_wrangling.html",
+    "title": "Data Wrangling",
     "section": "",
-    "text": "This is a template example for lab journaling. Students in the data science courses at the Institute of Entrepreneurship will use this template to learn R for business analytics. Students can replace this text as they wish."
+    "text": "Data wrangling (Cleaning & Preparation) is the important process of preparing data for analysis and the foundation of exploratory data analysis.\n\nIn this section we will work with the data about: Patents\nQUESTION 1\n“The table shows the top 10 US companies with the most assigned/granted patents.”\n\n\n\n\n\norganization\nN\n\n\n\nInternational Business Machines Corporation\n19056\n\n\nQUALCOMM Incorporated\n7322\n\n\nMicrosoft Corporation\n7195\n\n\nGoogle Inc.\n6082\n\n\nApple Inc.\n5542\n\n\nAT&T INTELLECTUAL PROPERTY I, L.P.\n5010\n\n\nGeneral Electric Company\n4646\n\n\nIntel Corporation\n4252\n\n\nGM Global Technology Operations LLC\n3920\n\n\nBroadcom Corporation\n3736\n\n\n\n\n\n\n\n\nQUESTION 2\n“The table lists the top 10 US companies with the most new granted patents for August 2014”\n\n\n\n\n\norganization\nN\n\n\n\nInternational Business Machines Corporation\n1810\n\n\nMicrosoft Corporation\n779\n\n\nQUALCOMM Incorporated\n591\n\n\nGoogle Inc.\n566\n\n\nApple Inc.\n501\n\n\nIntel Corporation\n404\n\n\nAT&T INTELLECTUAL PROPERTY I, L.P.\n401\n\n\nBroadcom Corporation\n353\n\n\nGeneral Electric Company\n345\n\n\nHewlett-Packard Development Company, L.P.\n341\n\n\n\n\n\n\n\n\nQUESTION 3\n“The table shows the top 5 USPTO tech main classes for the top 10 companies worldwide with the most patents.”\n\n\n\n\n\nmainclass_id\nN\n\n\n\n257\n41500\n\n\n455\n29419\n\n\n370\n25628\n\n\n438\n20372\n\n\n709\n18345"
   },
   {
-    "objectID": "index.html#how-to-use",
-    "href": "index.html#how-to-use",
-    "title": "My Lab Journal",
-    "section": "How to use",
-    "text": "How to use\n\nAccept the assignment and get your own github repo.\nBlog/journal what you are doing in R, by editing the .qmd files.\nSee the links page for lots of helpful links on learning R.\nChange everything to make it your own.\nMake sure to render you website everytime before you want to upload changes"
+    "objectID": "content/01_journal/01_tidyverse.html",
+    "href": "content/01_journal/01_tidyverse.html",
+    "title": "Tidyverse",
+    "section": "",
+    "text": "Tidyverse is a collection of essential R packages for data science. The packages under the tidyverse umbrella help us in performing and interacting with the data. There are a whole host of things you can do with your data, such as subsetting, transforming, visualizing, etc.\n\nIn this section we will study the sales of bikes through bikes stores in Germany. We will work with a database provided by Canyon\nAfter clean all the data we are showing two different tasks.\n\nCHALLENGE 1: Revenue by State\nIn the column bar plot you can see the Revenue by State . As we can see the state of North Rhine-Westphalia is the one that has highest Revenue.\n\nIt is recommended to expand the pictures to see them properly.\n\n\n\n\n\n\n\n\n\nCHALLENGE 2: Sales by location and year\nIn the image below we are separating the images for each state in each year. This will give us 12 different bar charts."
+  },
+  {
+    "objectID": "content/01_journal/02_data_acquisition.html",
+    "href": "content/01_journal/02_data_acquisition.html",
+    "title": "Data Acquisition",
+    "section": "",
+    "text": "Data acquisition is the process of converting real-world signals to the digital domain for display, storage, and analysis.\n\nIn this section we will work with two concepts API and Scraping. In the Task 1 we will work with the API and can get the weather of Madrid. For that, we will use the following link Open Weather. In the Task 2 we will scrape the model and prices from the page Rose Bikes.\nCHALLENGE: Using API to get Madrid’s temperature\n\n\n\n\n\n\n\n\nCHALLENGE 2: Scraping to get prices from different bike models\nThe idea is to print the model and price from adventure bikes.\n\n\n\n\n\nModel\nPrice\n\n\n\nBACKROAD AL\n1.999,00 €\n\n\nBACKROAD\n2.999,00 €\n\n\nBACKROAD LIMITED\n4.449,00 €"
+  },
+  {
+    "objectID": "content/01_journal/04_data_visualization.html",
+    "href": "content/01_journal/04_data_visualization.html",
+    "title": "Data Visualization",
+    "section": "",
+    "text": "Data visualization is the graphical representation of information and data. By using visual elements like charts, graphs, and maps, data visualization tools provide an accessible way to see and understand trends, outliers, and patterns in data. Additionally, it provides an excellent way for employees or business owners to present data to non-technical audiences without confusion.\n\nIn this section we will work with the data from COVID-19 DATABASE In the first task, we will see the cumulative Covid-19 cases. In the second task we will see the heat map due to Covid-19 confirmed deaths.\nTASK 1\n\n\n\n\n\n\n\n\nCHALLENGE 2"
+  },
+  {
+    "objectID": "content/03_other/06_links.html",
+    "href": "content/03_other/06_links.html",
+    "title": "Links",
+    "section": "",
+    "text": "R is a free open-source programming language that can be used for statistical analysis, data-simulation, graphing, and lots of other stuff. Another free program is R-studio, that provides a nice graphic interface for R. Download R first, then download R-studio. Both can run on PCs, Macs or Linux. Students will be learning R in the stats labs using the lab manual .\n\n\n\n\nGoogle is great, Google your problem\nStackoverflow is great, google will often take you there because someone has already asked your question, and someone else has answered, usually many people have answered your question many ways."
+  },
+  {
+    "objectID": "content/03_other/06_links.html#r-and-r-studio",
+    "href": "content/03_other/06_links.html#r-and-r-studio",
+    "title": "Links",
+    "section": "",
+    "text": "R is a free open-source programming language that can be used for statistical analysis, data-simulation, graphing, and lots of other stuff. Another free program is R-studio, that provides a nice graphic interface for R. Download R first, then download R-studio. Both can run on PCs, Macs or Linux. Students will be learning R in the stats labs using the lab manual ."
+  },
+  {
+    "objectID": "content/03_other/06_links.html#additional-r-resources",
+    "href": "content/03_other/06_links.html#additional-r-resources",
+    "title": "Links",
+    "section": "",
+    "text": "Google is great, Google your problem\nStackoverflow is great, google will often take you there because someone has already asked your question, and someone else has answered, usually many people have answered your question many ways."
   }
 ]

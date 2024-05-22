@@ -1,98 +1,121 @@
 ---
 title: "Tidyverse"
-author: "Joschka Schwarz"
+author: "Miguel Peñate"
+format:
+  html:
+    code-fold: true
+    self-contained: false
+---
+> Tidyverse is a collection of essential R packages for data science. The packages under the tidyverse umbrella help us in performing and interacting with the data. There are a whole host of things you can do with your data, such as subsetting, transforming, visualizing, etc.
+
+In this section we will study the **sales of bikes** through bikes stores in Germany.
+We will work with a database provided by [Canyon](https://cloud.tuhh.de/index.php/s/Cxe7YSM8RY2SgCn)
+
+After clean all the data we are showing *two* different tasks.
 ---
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+### CHALLENGE 1: Revenue by State
 
-This is a `.qmd` file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a \# in front of your text, it will create a top level-header.
+In the column bar plot you can see the <u>Revenue by State</u> . As we can see the state of **North Rhine-Westphalia** is the one that has highest Revenue.
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+> It is recommended to expand the pictures to see them properly.
 
-# Text Formatting
+```{r plot1, fig.width=18, fig.height=7, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(readxl)
+library(scales)
+library(lubridate)
+library(here)
+library(ggrepel)
 
-*italics* and **bold**
+# Build the relatives routes in the file .qmd
+bikes_path <- here::here("01_raw_data", "bikes.xlsx")
+orderlines_path <- here::here("01_raw_data", "orderlines.xlsx")
+bikeshops_path <- here::here("01_raw_data", "bikeshops.xlsx")
 
-superscript^2^ / subscript~2~
+# Load the data using the relatives routes
+bikes_tbl <- read_excel(bikes_path)
+orderlines_tbl <- read_excel(orderlines_path)
+bikeshops_tbl <- read_excel(bikeshops_path)
 
-~~strikethrough~~
+# Join the tables
+bike_orderlines_joined_tbl <- orderlines_tbl %>%
+  left_join(bikes_tbl, by = c("product.id" = "bike.id")) %>%
+  left_join(bikeshops_tbl, by = c("customer.id" = "bikeshop.id"))
 
-`verbatim code`
+# Manipulate the data
+bike_orderlines_wrangled_tbl <- bike_orderlines_joined_tbl %>%
+  separate(col = category, into = c("category.1", "category.2", "category.3"), sep = " - ") %>%
+  mutate(total.price = price * quantity) %>%
+  select(-...1, -gender) %>%
+  select(-ends_with(".id")) %>%
+  bind_cols(bike_orderlines_joined_tbl %>% select(order.id)) %>%
+  select(order.id, contains("order"), contains("model"), contains("category"),
+         price, quantity, total.price, everything()) %>%
+  rename(bikeshop = name) %>%
+  set_names(names(.) %>% str_replace_all("\\.", "_"))
 
-> Blockquote
+# Separar ubication in city and state
+bike_orderlines_wrangled_tbl <- bike_orderlines_wrangled_tbl %>%
+  separate(col = location, into = c("city", "state"), sep = ", ")
 
-# Headings
-
-## Header 2
-### Header 3
-#### Header 4
-##### Header 5
-###### Header 6
-
-# Links & Images
-
-<https://quarto.org>
-
-[Quarto](https://quarto.org)
-
-![Caption](../../assets/img/elephant.png)
-
-[![Caption](../../assets/img/elephant.png)](https://quarto.org)
-
-[![Caption](../../assets/img/elephant.png)](https://quarto.org "An elephant")
+# Create table
+sales_by_loc_tbl <- bike_orderlines_wrangled_tbl %>%
+  group_by(state) %>%
+  summarize(sales = sum(total_price)) %>%
+  mutate(sales_text = scales::dollar(sales, big.mark = ".", 
+                                     decimal.mark = ",", 
+                                     prefix = "", 
+                                     suffix = " €"))
 
 
-# Lists
-
-* unordered list
-    + sub-item 1
-    + sub-item 2
-        - sub-sub-item 1
-        
-*   item 2
-
-    Continued (indent 4 spaces)
-    
-    
-1. ordered list
-2. item 2
-    i) sub-item 1
-         A.  sub-sub-item 1
-         
-(@)  A list whose numbering
-
-continues after
-
-(@)  an interruption
-
-# Tables
-
-| Right | Left | Default | Center |
-|------:|:-----|---------|:------:|
-|   12  |  12  |    12   |    12  |
-|  123  |  123 |   123   |   123  |
-|    1  |    1 |     1   |     1  |
-
-# Source Code
-
-Use ``` to delimit blocks of source code:
-
-```
-code
+# Visualize with ggplot2
+ggplot(sales_by_loc_tbl, aes(x = reorder(state, -sales), y = sales)) +
+  geom_col(fill = "#2DC6D6") +
+  geom_text_repel(aes(label = sales_text), size = 7, box.padding = 0.5, max.overlaps = 10) +
+  scale_y_continuous(labels = scales::dollar_format(big.mark = ".", 
+                                                    decimal.mark = ",", 
+                                                    prefix = "", 
+                                                    suffix = " €")) +
+  labs(
+    title = "Revenue by State",
+    subtitle = "Total revenue by state",
+    x = "State",
+    y = "Revenue"
+  ) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-Add a language to syntax highlight code blocks:
+### CHALLENGE 2: Sales by location and year
 
-```{r}
-1 + 1
-```
+In the image below we are separating the images for each state in each year. This will give us 12 different bar charts.
 
-```{r}
-cars
-```
+```{r plot2, fig.width=18, fig.height=11, echo=FALSE, message=FALSE, warning=FALSE}
+# TASK 2: create table location and year
+sales_by_year_loc_tbl <- bike_orderlines_wrangled_tbl %>%
+  mutate(year = year(order_date)) %>%
+  group_by(state, year) %>%
+  summarize(sales = sum(total_price), .groups = 'drop') %>%
+  mutate(sales_text = scales::dollar(sales, big.mark = ".", 
+                                     decimal.mark = ",", 
+                                     prefix = "", 
+                                     suffix = " €"))
 
-```{r}
-plot(cars)
+# Visualize sales by location and year
+sales_by_year_loc_tbl %>%
+  ggplot(aes(x = year, y = sales, fill = state)) +
+  geom_col() +
+  geom_text_repel(aes(label = sales_text), size = 3.5, box.padding = 0.3, max.overlaps = 10) +
+  scale_y_continuous(labels = scales::dollar_format(big.mark = ".", 
+                                                    decimal.mark = ",", 
+                                                    prefix = "", 
+                                                    suffix = " €")) +
+  labs(
+    title = "Revenue by Year and State",
+    subtitle = "Total revenue by year and state",
+    x = "Year",
+    y = "Revenue"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  facet_wrap(~ state, scales = "free_y")
+
 ```
