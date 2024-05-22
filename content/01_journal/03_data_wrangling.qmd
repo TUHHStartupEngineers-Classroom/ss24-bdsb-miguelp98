@@ -1,16 +1,22 @@
 ---
 title: "Data Wrangling"
 author: "Miguel Peñate"
-date: "`r Sys.Date()`"
+#date: "`r Sys.Date()`"
 format:
   html:
     code-fold: true
     self-contained: false
 ---
+>Data wrangling (Cleaning & Preparation) is the important process of preparing data for analysis and the foundation of exploratory data analysis.
 
+In this section we will work with the data about: [Patents](https://cloud.tuhh.de/index.php/s/sGZKmdfLfdZBFK9)
 
-```{r plot, fig.width=10, fig.height=7}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+### QUESTION 1
+
+"The table shows the top 10 US companies with the most assigned/granted patents."
+
+```{r plot, fig.width=10, fig.height=7, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 setwd("C:/Users/migue/Desktop/Hamburg/TUHH/ss24-bdsb-miguelp98/01_raw_data")
 # Cargar librerías necesarias
@@ -18,6 +24,7 @@ library(tidyverse)
 library(vroom)
 library(data.table)
 library(tictoc)
+library(kableExtra)
 
 # Definir los tipos de columnas para cada archivo
 
@@ -95,25 +102,48 @@ combined_data <- merge(patent_tbl, patent_assignee_tbl, by = "id")
 combined_data <- merge(combined_data, assignee_tbl, by.x = "assignee_id", by.y = "id")
 combined_data <- merge(combined_data, uspc_tbl, by = "id")
 
+# Filtrar las empresas americanas
+us_assignees <- combined_data[type %in% c(2, 4, 6, 8, 9)]
+
 # Visualizar una muestra de los datos combinados
-combined_data %>% glimpse()
+#us_assignees %>% glimpse()
 
 # Contar las patentes por organización
-patent_count <- combined_data[, .N, by = organization][order(-N)][1:10]
+patent_count <- us_assignees[, .N, by = organization][order(-N)][1:10]
 
-# Mostrar el resultado
-print(patent_count)
+# Mostrar el resultado en formato de tabla
+kable(patent_count, format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
 
+
+---
+
+### QUESTION 2
+
+"The table lists the top 10 US companies with the most new granted patents for August 2014"
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
 # Filtrar patentes de agosto de 2014 y contar por organización
-august_patents <- combined_data[format(date, "%Y-%m") == "2014-08", .N, by = organization][order(-N)][1:10]
+august_patents <- us_assignees[format(date, "%Y-%m") == "2014-08", .N, by = organization][order(-N)][1:10]
 
-# Mostrar el resultado
-print(august_patents)
+# Mostrar el resultado en formato de tabla
+kable(august_patents, format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
 
+---
+
+### QUESTION 3
+
+"The table shows the top 5 USPTO tech main classes for the top 10 companies worldwide with the most patents."
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Filtrar datos y contar las principales clases tecnológicas
 top_tech_sectors <- combined_data[, .N, by = mainclass_id][order(-N)][1:5]
 
-# Mostrar el resultado
-print(top_tech_sectors)
+# Mostrar el resultado en formato de tabla
+kable(top_tech_sectors, format = "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```

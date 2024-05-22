@@ -14,7 +14,7 @@ We will work with a database provided by [Canyon](https://cloud.tuhh.de/index.ph
 After clean all the data we are showing *two* different tasks.
 ---
 
-### Task 1: Revenue by State
+### CHALLENGE 1: Revenue by State
 
 In the column bar plot you can see the <u>Revenue by State</u> . As we can see the state of **North Rhine-Westphalia** is the one that has highest Revenue.
 
@@ -85,7 +85,7 @@ ggplot(sales_by_loc_tbl, aes(x = reorder(state, -sales), y = sales)) +
   ) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-### Task 2: Sales by location and year
+### CHALLENGE 2: Sales by location and year
 
 In the image below we are separating the images for each state in each year. This will give us 12 different bar charts.
 

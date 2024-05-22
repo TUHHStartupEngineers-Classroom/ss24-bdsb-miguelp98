@@ -14,7 +14,7 @@ In the **Task 1** we will work with the API and can get the weather of Madrid. F
 In the **Task 2** we will scrape the model and prices from the page [Rose Bikes](https://www.rosebikes.de).
 
 
-### Task 1: Using API to get Madrid's temperature
+### CHALLENGE: Using API to get Madrid's temperature
 
 ```{r plot1, fig.width=4, fig.height=2, echo=FALSE, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
@@ -66,11 +66,9 @@ if (status_code(response) == 200) {
 }
 ```
 
-### Task 2: Scraping to get prices from different bike models
+### CHALLENGE 2: Scraping to get prices from different bike models
 
-The idea is to print the model and price of the next picture:
-
-![](assets/logo/rose.png){width=90% fig-align="center"}
+The idea is to print the model and price from adventure bikes.
 
 
 

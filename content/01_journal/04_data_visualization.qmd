@@ -6,6 +6,14 @@ author: "Miguel Peñate"
    # code-fold: true
     #self-contained: false
 ---
+>Data visualization is the graphical representation of information and data. By using visual elements like charts, graphs, and maps, data visualization tools provide an accessible way to see and understand trends, outliers, and patterns in data. Additionally, it provides an excellent way for employees or business owners to present data to non-technical audiences without confusion.
+
+In this section we will work with the data from [COVID-19 DATABASE](https://covid.ourworldindata.org/data/owid-covid-data.csv)
+In the **first task**, we will see the cumulative Covid-19 cases.
+In the **second task** we will see the heat map due to Covid-19 confirmed deaths.
+
+
+### TASK 1
 
 ```{r plot, fig.width=10, fig.height=7, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
